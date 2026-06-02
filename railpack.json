@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schema.railpack.com/railpack-schema.json",
+  "provider": "node",
+  "build": {
+    "command": "pnpm install --frozen-lockfile && pnpm build && NODE_ENV=production DOCKER_BUILD=true pnpm --filter=n8n --prod --legacy deploy --no-optional /app/compiled"
+  },
+  "deploy": {
+    "startCommand": "/app/compiled/bin/n8n start",
+    "variables": {
+      "N8N_PORT": "5678",
+      "N8N_HOST": "0.0.0.0",
+      "GENERIC_TIMEZONE": "UTC"
+    }
+  }
+}

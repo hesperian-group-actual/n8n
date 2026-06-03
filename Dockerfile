@@ -15,7 +15,7 @@ COPY turbo.json biome.jsonc tsconfig.json ./
 
 # Install and build, then create pruned deployment
 RUN DOCKER_BUILD=true pnpm install --frozen-lockfile
-RUN pnpm build
+RUN pnpm build --filter=!@n8n/mcp-browser
 RUN NODE_ENV=production DOCKER_BUILD=true pnpm --filter=n8n --prod --legacy deploy --no-optional /compiled
 
 # Rebuild native modules for Alpine

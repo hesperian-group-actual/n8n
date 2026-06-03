@@ -1,0 +1,9 @@
+# Railpack uses this instead of .dockerignore (which is a whitelist tuned for
+# the upstream n8n docker images and is incompatible with a full source build).
+.git
+node_modules
+**/node_modules
+**/dist
+**/.turbo
+compiled
+.dockerignore

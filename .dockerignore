@@ -39,9 +39,3 @@
 !packages/@n8n/typescript-config
 !packages/@n8n/typescript-config/**
 
-# === Railway root Dockerfile (full source build) ===
-!turbo.json
-!biome.jsonc
-!tsconfig.json
-!packages/**
-

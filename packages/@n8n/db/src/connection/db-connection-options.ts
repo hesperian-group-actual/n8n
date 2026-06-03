@@ -32,6 +32,7 @@ export class DbConnectionOptions {
 	}
 
 	getOptions(): DataSourceOptions {
+		if (this.config.url) return this.getPostgresConnectionOptions();
 		const { type: dbType } = this.config;
 		switch (dbType) {
 			case 'sqlite':
@@ -103,13 +104,13 @@ export class DbConnectionOptions {
 		return {
 			type: 'postgres',
 			...this.getCommonOptions(),
-			...this.getPostgresOverrides(),
+			...(this.config.url ? { url: this.config.url } : this.getPostgresOverrides()),
 			schema: postgresConfig.schema,
 			poolSize: postgresConfig.poolSize,
 			migrations: postgresMigrations,
 			connectTimeoutMS: postgresConfig.connectionTimeoutMs,
 			statementTimeout: postgresConfig.statementTimeoutMs,
-			ssl,
+			ssl: this.config.url ? undefined : ssl,
 			extra: {
 				idleTimeoutMillis: postgresConfig.idleTimeoutMs,
 			},

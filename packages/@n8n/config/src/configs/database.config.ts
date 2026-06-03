@@ -124,6 +124,13 @@ export class DatabaseConfig {
 	@Env('DB_TYPE', dbTypeSchema)
 	type: DbType = 'sqlite';
 
+	/**
+	 * Full Postgres connection URL (e.g. postgresql://user:pass@host/db?sslmode=require).
+	 * When set, overrides all individual DB_POSTGRESDB_* vars and implies DB_TYPE=postgresdb.
+	 */
+	@Env('N8N_DB_URL')
+	url: string = '';
+
 	/** Prefix prepended to all n8n table names (useful for shared databases). */
 	@Env('DB_TABLE_PREFIX')
 	tablePrefix: string = '';

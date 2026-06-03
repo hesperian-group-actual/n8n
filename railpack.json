@@ -2,10 +2,7 @@
   "$schema": "https://schema.railpack.com/railpack-schema.json",
   "provider": "node",
   "aptPkgs": ["python3", "make", "g++"],
-  "build": {
-    "command": "pnpm build --filter=n8n... --filter=!@n8n/mcp-browser && NODE_ENV=production DOCKER_BUILD=true pnpm --filter=n8n --prod --legacy deploy --no-optional ./compiled"
-  },
   "start": {
-    "command": "./compiled/bin/n8n start"
+    "command": "node packages/cli/bin/n8n start"
   }
 }

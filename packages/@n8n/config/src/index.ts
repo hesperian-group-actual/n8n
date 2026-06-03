@@ -140,7 +140,7 @@ export class GlobalConfig {
 
 	/** HTTP port n8n can be reached */
 	@Env('N8N_PORT')
-	port: number = 5678;
+	port: number = parseInt(process.env.PORT ?? '5678', 10);
 
 	/** IP address n8n should listen on */
 	@Env('N8N_LISTEN_ADDRESS')

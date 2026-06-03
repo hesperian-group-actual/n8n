@@ -3,7 +3,7 @@
   "provider": "node",
   "aptPkgs": ["python3", "make", "g++"],
   "build": {
-    "command": "pnpm build && NODE_ENV=production DOCKER_BUILD=true pnpm --filter=n8n --prod --legacy deploy --no-optional ./compiled"
+    "command": "pnpm build --filter=!@n8n/mcp-browser && NODE_ENV=production DOCKER_BUILD=true pnpm --filter=n8n --prod --legacy deploy --no-optional ./compiled"
   },
   "start": {
     "command": "./compiled/bin/n8n start"

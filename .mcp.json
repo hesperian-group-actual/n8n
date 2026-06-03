@@ -1,9 +1,8 @@
 {
   "mcpServers": {
     "railway": {
-      "type": "stdio",
-      "command": "railway",
-      "args": ["mcp"]
+      "type": "http",
+      "url": "https://mcp.railway.com"
     }
   }
 }

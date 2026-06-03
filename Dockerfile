@@ -14,7 +14,7 @@ COPY scripts/ ./scripts/
 COPY turbo.json biome.jsonc tsconfig.json ./
 
 # Install and build, then create pruned deployment
-RUN pnpm install --frozen-lockfile
+RUN DOCKER_BUILD=true pnpm install --frozen-lockfile
 RUN pnpm build
 RUN NODE_ENV=production DOCKER_BUILD=true pnpm --filter=n8n --prod --legacy deploy --no-optional /compiled
 

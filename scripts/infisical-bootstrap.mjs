@@ -11,6 +11,7 @@ const {
 	INFISICAL_CLIENT_SECRET,
 	INFISICAL_PROJECT_ID,
 	INFISICAL_ENV = 'prod',
+	INFISICAL_SECRET_PATH = '/',
 } = process.env;
 
 async function fetchSecrets() {
@@ -35,7 +36,7 @@ async function fetchSecrets() {
 	const { accessToken } = await tokenRes.json();
 
 	const secretsRes = await fetch(
-		`${base}/api/v3/secrets/raw?workspaceId=${INFISICAL_PROJECT_ID}&environment=${INFISICAL_ENV}&expandSecretReferences=true`,
+		`${base}/api/v3/secrets/raw?workspaceId=${INFISICAL_PROJECT_ID}&environment=${INFISICAL_ENV}&secretPath=${encodeURIComponent(INFISICAL_SECRET_PATH)}&expandSecretReferences=true`,
 		{ headers: { Authorization: `Bearer ${accessToken}` } },
 	);
 

@@ -3,6 +3,6 @@
   "provider": "node",
   "aptPkgs": ["python3", "make", "g++"],
   "start": {
-    "command": "node packages/cli/bin/n8n start"
+    "command": "node scripts/infisical-bootstrap.mjs node packages/cli/bin/n8n start"
   }
 }

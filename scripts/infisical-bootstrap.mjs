@@ -36,7 +36,7 @@ async function fetchSecrets() {
 	const { accessToken } = await tokenRes.json();
 
 	const secretsRes = await fetch(
-		`${base}/api/v3/secrets/raw?workspaceId=${INFISICAL_PROJECT_ID}&environment=${INFISICAL_ENV}&secretPath=${encodeURIComponent(INFISICAL_SECRET_PATH)}&expandSecretReferences=true`,
+		`${base}/api/v3/secrets/raw?workspaceId=${INFISICAL_PROJECT_ID}&environment=${INFISICAL_ENV}&secretPath=${encodeURIComponent(INFISICAL_SECRET_PATH)}&expandSecretReferences=true&recursive=true`,
 		{ headers: { Authorization: `Bearer ${accessToken}` } },
 	);
 

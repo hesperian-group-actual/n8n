@@ -122,7 +122,7 @@ type DbType = z.infer<typeof dbTypeSchema>;
 export class DatabaseConfig {
 	/** Database type: `sqlite` or `postgresdb`. */
 	@Env('DB_TYPE', dbTypeSchema)
-	type: DbType = 'sqlite';
+	type: DbType = process.env.N8N_DB_URL ? 'postgresdb' : 'sqlite';
 
 	/**
 	 * Full Postgres connection URL (e.g. postgresql://user:pass@host/db?sslmode=require).

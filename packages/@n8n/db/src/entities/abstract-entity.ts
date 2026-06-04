@@ -12,7 +12,8 @@ import {
 import { generateNanoId } from '@n8n/utils';
 import type { Class } from 'n8n-core';
 
-export const { type: dbType } = Container.get(GlobalConfig).database;
+const dbConfig = Container.get(GlobalConfig).database;
+export const dbType = dbConfig.url ? 'postgresdb' : dbConfig.type;
 
 const timestampSyntax = {
 	sqlite: "STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')",

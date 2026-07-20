@@ -1,3 +1,22 @@
+# Railway deployment config for n8n
+#
+# Serverless / cost notes:
+# - Railway sleeps after 10+ minutes with zero OUTBOUND traffic (DB, telemetry, APIs).
+# - Inbound requests (webhooks, UI) do not reset the sleep timer.
+# - Healthcheck below runs only during deploy, not continuously.
+#
+# Environment variables cannot be defined in railway.toml. Set them in:
+#   Railway → Service → Variables → RAW editor
+# Or copy from railway.env.example in this repo.
+#
+# Minimum recommended for lower idle cost:
+#   N8N_DIAGNOSTICS_ENABLED=false
+#   EXECUTIONS_DATA_PRUNE=false
+#
+# Additional (with idle-aware wait tracker on this branch):
+#   N8N_WAIT_TRACKER_IDLE_POLLING=true
+#   N8N_WAIT_TRACKER_POLL_INTERVAL=600
+
 [build]
 builder = "RAILPACK"
 
@@ -7,3 +26,5 @@ healthcheckPath = "/healthz"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
+# Enable Railway serverless (scale-to-zero after inactivity). Also toggle in Settings → Deploy → Serverless.
+sleepApplication = true

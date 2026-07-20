@@ -40,6 +40,20 @@ class QueueRecoveryConfig {
 }
 
 @Config
+class WaitTrackerConfig {
+	/** How often (seconds) to poll the database for waiting executions while polling is active. */
+	@Env('N8N_WAIT_TRACKER_POLL_INTERVAL')
+	pollIntervalSeconds: number = 60;
+
+	/**
+	 * When enabled, stop polling the database while no executions are waiting.
+	 * Automatically disabled in multi-main setups.
+	 */
+	@Env('N8N_WAIT_TRACKER_IDLE_POLLING')
+	idlePollingEnabled: boolean = true;
+}
+
+@Config
 class RecoveryConfig {
 	/**
 	 * Number of last executions to check when determining if a workflow should be deactivated
@@ -137,6 +151,9 @@ export class ExecutionsConfig {
 
 	@Nested
 	recovery: RecoveryConfig;
+
+	@Nested
+	waitTracker: WaitTrackerConfig;
 
 	/** Whether to save execution data for failed production executions. This default can be overridden at a workflow level. */
 	@Env('EXECUTIONS_DATA_SAVE_ON_ERROR')

@@ -439,6 +439,10 @@ describe('GlobalConfig', () => {
 				maxLastExecutions: 3,
 				workflowDeactivationEnabled: false,
 			},
+			waitTracker: {
+				pollIntervalSeconds: 60,
+				idlePollingEnabled: true,
+			},
 			saveDataOnError: 'all',
 			saveDataOnSuccess: 'all',
 			saveExecutionProgress: false,

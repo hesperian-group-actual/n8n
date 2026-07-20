@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { mockLogger } from '@n8n/backend-test-utils';
+import type { ExecutionsConfig } from '@n8n/config';
 import type { Project, IExecutionResponse, ExecutionRepository } from '@n8n/db';
 import { mock, captor } from 'jest-mock-extended';
 import type { InstanceSettings } from 'n8n-core';
@@ -21,6 +22,9 @@ describe('WaitTracker', () => {
 	const executionRepository = mock<ExecutionRepository>();
 	const multiMainSetup = mock<MultiMainSetup>();
 	const instanceSettings = mock<InstanceSettings>({ isLeader: true, isMultiMain: false });
+	const executionsConfig = mock<ExecutionsConfig>({
+		waitTracker: { pollIntervalSeconds: 60, idlePollingEnabled: true },
+	});
 
 	const project = mock<Project>({ id: 'projectId' });
 	const execution = mock<IExecutionResponse>({
@@ -49,6 +53,7 @@ describe('WaitTracker', () => {
 			activeExecutions,
 			workflowRunner,
 			instanceSettings,
+			executionsConfig,
 		);
 		multiMainSetup.on.mockReturnThis();
 	});
@@ -565,6 +570,31 @@ describe('WaitTracker', () => {
 
 			expect(executionRepository.getWaitingExecutions).toHaveBeenCalledTimes(1);
 		});
+
+		it('should not poll the database while idle', async () => {
+			executionRepository.getWaitingExecutions.mockResolvedValue([]);
+
+			waitTracker.init();
+			await jest.advanceTimersByTimeAsync(120_000);
+
+			expect(executionRepository.getWaitingExecutions).toHaveBeenCalledTimes(1);
+		});
+
+		it('should resume polling after a waiting execution is scheduled', async () => {
+			executionRepository.getWaitingExecutions.mockResolvedValue([]);
+
+			waitTracker.init();
+			executionRepository.getWaitingExecutions.mockResolvedValue([execution]);
+
+			waitTracker.scheduleCheck();
+			await jest.advanceTimersByTimeAsync(0);
+
+			expect(executionRepository.getWaitingExecutions).toHaveBeenCalledTimes(2);
+
+			await jest.advanceTimersByTimeAsync(60_000);
+
+			expect(executionRepository.getWaitingExecutions).toHaveBeenCalledTimes(3);
+		});
 	});
 
 	describe('multi-main setup', () => {
@@ -584,6 +614,7 @@ describe('WaitTracker', () => {
 				activeExecutions,
 				workflowRunner,
 				mock<InstanceSettings>({ isLeader: false, isMultiMain: false }),
+				executionsConfig,
 			);
 
 			executionRepository.getWaitingExecutions.mockResolvedValue([]);
@@ -591,6 +622,27 @@ describe('WaitTracker', () => {
 			waitTracker.init();
 
 			expect(executionRepository.getWaitingExecutions).not.toHaveBeenCalled();
+		});
+		it('should keep polling on an interval in multi-main setups', async () => {
+			const multiMainExecutionsConfig = mock<ExecutionsConfig>({
+				waitTracker: { pollIntervalSeconds: 60, idlePollingEnabled: true },
+			});
+			const multiMainWaitTracker = new WaitTracker(
+				mockLogger(),
+				executionRepository,
+				ownershipService,
+				activeExecutions,
+				workflowRunner,
+				mock<InstanceSettings>({ isLeader: true, isMultiMain: true }),
+				multiMainExecutionsConfig,
+			);
+
+			executionRepository.getWaitingExecutions.mockResolvedValue([]);
+
+			multiMainWaitTracker.init();
+			await jest.advanceTimersByTimeAsync(60_000);
+
+			expect(executionRepository.getWaitingExecutions).toHaveBeenCalledTimes(2);
 		});
 	});
 });

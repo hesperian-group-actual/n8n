@@ -32,6 +32,7 @@ import { WorkflowStatisticsService } from '@/services/workflow-statistics.servic
 import { isWorkflowIdValid } from '@/utils';
 import { getItemCountByConnectionType } from '@/utils/get-item-count-by-connection-type';
 import { getLastExecutedNodeData } from '@/workflow-helpers';
+import { WaitTracker } from '@/wait-tracker';
 import { WorkflowHookContextService } from '@/workflow-hook-context.service';
 import { WorkflowStaticDataService } from '@/workflows/workflow-static-data.service';
 
@@ -604,6 +605,10 @@ function hookFunctionsSave(
 				workflowId: this.workflowData.id,
 				executionData: fullExecutionData,
 			});
+
+			if (fullRunData.waitTill) {
+				Container.get(WaitTracker).scheduleCheck();
+			}
 
 			await updateExistingExecutionMetadata(
 				this.executionId,

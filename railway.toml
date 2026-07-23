@@ -16,6 +16,7 @@
 # Additional (with idle-aware wait tracker on this branch):
 #   N8N_WAIT_TRACKER_IDLE_POLLING=true
 #   N8N_WAIT_TRACKER_POLL_INTERVAL=600
+#   N8N_WORKFLOW_HISTORY_OPTIMIZING_TIME_WINDOW_HOURS=12  # ~every 6h (window/2)
 
 [build]
 builder = "RAILPACK"

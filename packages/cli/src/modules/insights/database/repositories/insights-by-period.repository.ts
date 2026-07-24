@@ -190,10 +190,21 @@ export class InsightsByPeriodRepository extends Repository<InsightsByPeriod> {
 		this.isRunningCompaction = true;
 
 		try {
+			// Avoid CREATE TEMPORARY TABLE when the batch is empty — empty create/drop
+			// still writes dozens of pg_catalog rows and shows up on Neon Rows charts.
+			const batchSql = sourceBatchQuery.getSql();
+			const preview = await this.manager.query<Array<{ rowsInBatch: number | string }>>(
+				`SELECT COUNT(*) AS "rowsInBatch" FROM (${batchSql}) AS _insights_batch`,
+			);
+			const previewCount = Number(preview[0]?.rowsInBatch ?? 0);
+			if (previewCount === 0) {
+				return 0;
+			}
+
 			// Create temp table that only exists in this transaction for rows to compact
 			const getBatchAndStoreInTemporaryTable = sql`
 				CREATE TEMPORARY TABLE rows_to_compact AS
-				${sourceBatchQuery.getSql()};
+				${batchSql};
 			`;
 
 			const countBatch = sql`

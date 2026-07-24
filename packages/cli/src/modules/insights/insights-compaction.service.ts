@@ -60,6 +60,19 @@ export class InsightsCompactionService {
 		this.isCompactionRunning = true;
 
 		try {
+			// Empty insights still used to CREATE/DROP temp tables for each stage
+			// (raw→hour, hour→day, day→week), which Neon reports as ~50 insert+delete
+			// catalog rows every compactionIntervalMinutes. Skip when there is nothing
+			// to compact.
+			const [rawCount, periodCount] = await Promise.all([
+				this.insightsRawRepository.count(),
+				this.insightsByPeriodRepository.count(),
+			]);
+			if (rawCount === 0 && periodCount === 0) {
+				this.logger.debug('Skipping insights compaction — no insights data');
+				return;
+			}
+
 			const runState: CompactionRunState = {
 				startedAt: Date.now(),
 				batchesProcessed: 0,

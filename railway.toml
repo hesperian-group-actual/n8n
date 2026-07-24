@@ -16,7 +16,8 @@
 # Additional (with idle-aware wait tracker on this branch):
 #   N8N_WAIT_TRACKER_IDLE_POLLING=true
 #   N8N_WAIT_TRACKER_POLL_INTERVAL=600
-#   N8N_WORKFLOW_HISTORY_OPTIMIZING_TIME_WINDOW_HOURS=12  # ~every 6h (window/2)
+#   N8N_WORKFLOW_HISTORY_OPTIMIZING_TIME_WINDOW_HOURS=24  # ~every 12h (window/2)
+#   N8N_INSIGHTS_COMPACTION_INTERVAL_MINUTES=720          # was hourly; empty runs caused Neon row spikes
 
 [build]
 builder = "RAILPACK"

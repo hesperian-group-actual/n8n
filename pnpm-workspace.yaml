@@ -80,7 +80,7 @@ catalog:
   '@stryker-mutator/vitest-runner': 9.6.1
   '@vitest/coverage-v8': 4.1.1
   agent-browser: 0.26.0
-  axios: 1.16.1
+  axios: 1.20.0
   babel-jest: ^29.7.0
   basic-auth: 2.0.1
   callsites: 3.1.0

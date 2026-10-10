@@ -1,5 +1,14 @@
 # AGENTS.md
 
+
+## Linear issue IDs (branches & PRs)
+
+- **Backlog:** Linear is the system of record. Do not open new GitHub issues for planning or tracking.
+- **Default team:** The Overseer (`OVR`) for work in this repository.
+- **Branches:** `<LINEAR-ID>-short-kebab-desc` (Linear “copy git branch name”), e.g. `OVR-458-enable-web-search`.
+- **Pull requests:** Title `[<LINEAR-ID>] …`; body includes `Fixes <LINEAR-ID>` (or `Part of <LINEAR-ID>` for partial work).
+- **No issue yet:** Create a Linear issue in the matching team first, or ask the operator for one before branching.
+
 This file provides guidance on how to work with the n8n repository.
 
 ## Project Overview

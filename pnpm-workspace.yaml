@@ -126,7 +126,7 @@ catalog:
   rimraf: 6.0.1
   sass-embedded: ^1.98.0
   semver: 7.7.3
-  simple-git: 3.36.0
+  simple-git: 4.0.1
   stream-json: 1.9.1
   testcontainers: ^11.13.0
   ts-morph: ^27.0.2

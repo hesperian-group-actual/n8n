@@ -240,3 +240,10 @@ titles, test descriptions, and Linear URLs.
 - Always reference the Linear ticket in the PR description,
   use `https://linear.app/n8n/issue/[TICKET-ID]`
 - always link to the github issue if mentioned in the linear ticket.
+
+## Shared rules (OVR-561)
+
+- The single source of shared bot and agent rules is `/home/box/bot-context/hard-rules.md`, which lives on Garrett's Grok Bot box. Only Garrett changes it. Cloud agents can't see the box, so they follow this mirror and the Linear issue they were given.
+- Put the Linear ID in the branch name (`<ID>-short-desc`) and in the PR title (`[<ID>] ...`), so a merge auto-closes the issue.
+- When the work is finished, mark the Linear issue Done with a proof link (PR, deploy or verification).
+- Never print or commit secrets. All keys live in Infisical.
